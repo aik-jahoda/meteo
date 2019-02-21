@@ -93,7 +93,7 @@ export async function getWeather(position: Position) {
         return json;
     }) as yr;
 
-console.log(json)
+    //console.log(json)
 
     const locations = json.weatherdata.product.time//.map(x => ({ ...x.location, from:x.from, to:x.to}));
     const temperatures = locations.filter((x)=>isLocationTemperature(x.location)).map(x => {
