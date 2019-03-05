@@ -1,0 +1,26 @@
+path.plus {
+  /* gradient and fallback color */
+  fill: url(#my-cool-gradient) #447799;
+    
+}
+
+path.minus {
+  fill: url(#my-cool-gradient-reverse) #447799;
+  
+}
+
+path.temerature{
+  fill: none;
+  stroke: blue;
+  stroke-width: 2;
+}
+
+circle.tempPoint {
+  r: 2;
+  fill: green;
+}
+
+line.zero {
+  stroke:black;
+  stroke-width:0.5
+}

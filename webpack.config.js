@@ -1,3 +1,5 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 module.exports = {
     entry: "./src/index.tsx",
     output: {
@@ -13,11 +15,17 @@ module.exports = {
         extensions: [".ts", ".tsx", ".js", ".json"]
     },
 
+    devServer: {
+        contentBase: __dirname + "/dist",
+        compress: true,
+        port: 9000
+    },
+
     mode: "development",
-	optimization: {
-		// We no not want to minimize our code.
-		minimize: false
-	},
+    optimization: {
+        // We no not want to minimize our code.
+        minimize: false
+    },
 
     module: {
         rules: [
@@ -25,7 +33,16 @@ module.exports = {
             { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
 
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
+            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
+
+            {
+                test: /\.(css)$/,
+                use: [{
+                    loader: 'style-loader', // inject CSS to page
+                }, {
+                    loader: 'css-loader', // translates CSS into CommonJS modules
+                }]
+            }
         ]
     },
 
@@ -37,4 +54,6 @@ module.exports = {
     //     "react": "React",
     //     "react-dom": "ReactDOM"
     // }
+
+    plugins: [new HtmlWebpackPlugin({ template: 'src/index.html' })]
 };

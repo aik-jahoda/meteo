@@ -4,22 +4,31 @@
   "description": "",
   "main": "service-worker.js",
   "dependencies": {
+    "d3": "^5.9.1",
+    "moment": "^2.24.0",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "xml-to-json-stream": "^1.1.0"
   },
   "devDependencies": {
+    "@types/d3": "^5.7.1",
+    "@types/moment": "^2.13.0",
     "@types/react": "^16.8.4",
     "@types/react-dom": "^16.8.2",
     "@types/webpack": "^4.4.24",
     "awesome-typescript-loader": "^5.2.1",
+    "css-loader": "^2.1.0",
+    "html-webpack-plugin": "^3.2.0",
     "source-map-loader": "^0.2.4",
+    "style-loader": "^0.23.1",
     "typescript": "^3.3.3",
     "webpack": "^4.29.5",
-    "webpack-cli": "^3.2.3"
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.2.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server --open"
   },
   "repository": {
     "type": "git",

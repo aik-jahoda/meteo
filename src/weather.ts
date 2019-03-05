@@ -1,4 +1,5 @@
 import xmlToJson from "xml-to-json-stream";
+import moment = require("moment");
 
 export interface Position { lat: number, lon: number }
 
@@ -30,10 +31,11 @@ export interface LocationTemperature {
     from: Date;
     to: Date;
 
-    temperature:  number;
-    dewpointTemperature:  number;
-    humidity:  number;
+    temperature: number;
+    dewpointTemperature: number;
+    humidity: number;
     windSpeed: { beaufort: number, mps: number, name: string }
+    symbol: number;
 }
 
 interface LocationTemperatureRaw {
@@ -96,20 +98,41 @@ export async function getWeather(position: Position) {
     //console.log(json)
 
     const locations = json.weatherdata.product.time//.map(x => ({ ...x.location, from:x.from, to:x.to}));
-    const temperatures = locations.filter((x)=>isLocationTemperature(x.location)).map(x => {
-        const temperature = x. location as LocationTemperatureRaw;
-        return <LocationTemperature>{
-            from:new Date(x.from),
-            to:new Date(x.to),
-            altitude: Number.parseFloat(temperature.altitude),
-            longtitude: Number.parseFloat(temperature.longtitude),
-            latitude: Number.parseFloat(temperature.latitude),
-            dewpointTemperature: Number.parseFloat(temperature.dewpointTemperature.value),
-            temperature:Number.parseFloat(temperature.temperature.value),
-            humidity: Number.parseFloat(temperature.humidity.value),
-            windSpeed: { mps: Number.parseFloat(temperature.windSpeed.mps), beaufort: Number.parseFloat(temperature.windSpeed.beaufort) }
+
+
+
+    const temperatures = locations.reduce<LocationTemperature[]>((previousValue, currentValue, currentIndex, array) => {
+        const from = moment(currentValue.from);
+        const to = moment(currentValue.to);
+        if (currentIndex > 0) {
+            const prev = array[currentIndex - 1];
+            if (isLocationTemperature(prev.location) && !isLocationTemperature(currentValue.location)) {
+                const prevFrom = moment(prev.from);
+                if (from.isSame(to.clone().subtract(1, "hour")) && to.isSame(prevFrom)) {
+                    const prevTo = moment(prev.to);
+                    previousValue.push({
+                        from: prevFrom.toDate(),
+                        to: prevTo.toDate(),
+                        altitude: Number.parseFloat(prev.location.altitude),
+                        longtitude: Number.parseFloat(prev.location.longtitude),
+                        latitude: Number.parseFloat(prev.location.latitude),
+                        dewpointTemperature: Number.parseFloat(prev.location.dewpointTemperature.value),
+                        temperature: Number.parseFloat(prev.location.temperature.value),
+                        humidity: Number.parseFloat(prev.location.humidity.value),
+                        windSpeed: {
+                            mps: Number.parseFloat(prev.location.windSpeed.mps),
+                            beaufort: Number.parseFloat(prev.location.windSpeed.beaufort),
+                            name: prev.location.windSpeed.name
+                        }, 
+                        symbol: Number.parseInt(currentValue.location.symbol.number)
+                    })
+                }
+            }
         }
-    });
+        return previousValue;
+    }, []);
+
+
     return temperatures;
 
 }
