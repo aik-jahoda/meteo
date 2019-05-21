@@ -2,6 +2,7 @@
   "name": "meteo",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "d3": "^5.9.2",
     "d3-interpolate": "^1.3.2",
