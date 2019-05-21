@@ -1,28 +1,41 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import { App } from "./app"
-import { ErrorBoundary } from "./errorBoundary";
+import './index.css';
+import * as serviceWorker from './serviceWorker';
+
+import  App from "./App";
+import { ErrorBoundary } from "./ErrorBoundary";
+import { Provider } from "react-redux";
+import configureStore from "./store";
 
 function start() {
+  
+  const app = document.getElementById("root");
+  if (!app) {
+    throw "Element with id 'root' not found.";
+  }
 
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker
-            .register('./service-worker.js')
-            .then(function () { console.log('Service Worker Registered'); });
-    }
+  const store = configureStore();
 
-    const app = document.getElementById("app");
-    if (!app) {
-        throw "Element with id 'app' not found."
-    }
-
-    ReactDOM.render((<ErrorBoundary><App /></ErrorBoundary>), app);
+  ReactDOM.render(
+    <ErrorBoundary>
+      <Provider store={store}>
+        <App />{" "}
+      </Provider>
+    </ErrorBoundary>,
+    app
+  );
 }
 
 if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => start());
+  document.addEventListener("DOMContentLoaded", () => start());
 } else {
-    start()
+  start();
 }
 
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.unregister();
