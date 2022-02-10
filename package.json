@@ -42,7 +42,7 @@
     "@types/react-redux": "^7.0.6",
     "@types/redux-logger": "^3.0.7",
     "@types/styled-components": "^4.1.14",
-    "node-sass": "^4.13.0",
+    "node-sass": "^7.0.0",
     "typescript": "^3.4.3"
   }
 }
